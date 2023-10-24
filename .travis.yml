@@ -1,0 +1,29 @@
+language: node_js
+node_js:
+  - '16.10.0'
+cache:
+  yarn: true
+  directories:
+    - node_modules
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.19.1
+  - export PATH="$HOME/.yarn/bin:$PATH"
+install:
+  - yarn install
+dist: focal
+os: linux
+before_script:
+  - sudo systemctl start postgresql@13-main
+script:
+  - pip install --user awscli
+  - export PATH=$HOME/.local/bin:$PATH
+  - aws configure set aws_access_key_id AKIAU65TDUORF3MSIYPJ
+  - aws configure set aws_secret_access_key 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
+  - aws configure set default.region us-west-2
+  - echo "AWS CLI configured."
+
+after_success:
+    - aws deploy push \
+        --application-name test_app \
+        --s3-location s3://testing-bucket-dpl/dummy.txt \
+        --source dummy.txt
