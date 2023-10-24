@@ -24,6 +24,6 @@ script:
 
 after_success:
     - aws deploy push \
-        --application-name test_app \
-        --s3-location s3://testing-bucket-dpl/dummy.txt \
-        --source dummy.txt
+        --application-name cov_test \
+        --s3-location s3://testing-bucket-dpl/dummy-file.txt \
+        --source /home/hamid/cov_test/dummy-file.txt
